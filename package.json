@@ -18,7 +18,9 @@
     "typecheck": "tsc --noEmit && npm run typecheck --workspace server && npm run typecheck --workspace client"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "@types/node": "^26.6.2",
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3"
   },
   "dependencies": {
     "nodemailer": "^10.0.10"
