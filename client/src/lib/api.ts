@@ -1,4 +1,7 @@
 const BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+
+/** Absolute URL for an API path, for links and iframes that bypass fetch(). */
+export const apiUrl = (path: string) => `${BASE}/api${path}`;
 const TOKEN_KEY = "portfolio.admin.token";
 
 export const auth = {
@@ -45,4 +48,27 @@ export async function api<T>(path: string, options: { method?: string; body?: un
     throw new ApiError(res.status, data?.message ?? `Request failed (${res.status})`);
   }
   return data as T;
+}
+
+/** Upload the résumé as raw PDF bytes (the JSON helper above cannot send files). */
+export async function uploadResume(file: File): Promise<{ size: number; updatedAt: string }> {
+  let res: Response;
+  try {
+    res = await fetch(apiUrl("/resume"), {
+      method: "PUT",
+      headers: { "Content-Type": "application/pdf", Authorization: `Bearer ${auth.token ?? ""}` },
+      body: file,
+    });
+  } catch {
+    throw new ApiError(0, "Cannot reach the server. Check your connection and try again.");
+  }
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    if (res.status === 401) {
+      auth.clear();
+      window.dispatchEvent(new Event("auth:expired"));
+    }
+    throw new ApiError(res.status, data?.message ?? `Upload failed (${res.status})`);
+  }
+  return data;
 }

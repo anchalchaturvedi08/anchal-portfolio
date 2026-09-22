@@ -89,6 +89,19 @@ const userSchema = new Schema(
   { timestamps: true, toJSON }
 );
 
+/* ---------- Résumé PDF (single document) ----------
+ * Stored in MongoDB rather than on disk so it survives redeploys and can be replaced
+ * from the admin panel without touching the hosting. A CV is well under MongoDB's
+ * 16 MB document limit; uploads are capped at 5 MB in the route. */
+const resumeSchema = new Schema(
+  {
+    data: { type: Buffer, required: true },
+    contentType: { type: String, default: "application/pdf" },
+    size: { type: Number, required: true },
+  },
+  { timestamps: true, toJSON }
+);
+
 export type ProfileDoc = InferSchemaType<typeof profileSchema>;
 
 export const Profile = model("Profile", profileSchema);
@@ -97,3 +110,4 @@ export const Skill = model("Skill", skillSchema);
 export const Experience = model("Experience", experienceSchema);
 export const Message = model("Message", messageSchema);
 export const User = model("User", userSchema);
+export const Resume = model("Resume", resumeSchema);

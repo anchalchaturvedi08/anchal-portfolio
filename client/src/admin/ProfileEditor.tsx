@@ -15,7 +15,7 @@ const fields: FieldDef[] = [
   { key: "available", label: "Show availability badge", type: "boolean" },
   { key: "about", label: "About", type: "lines", hint: "One paragraph per line" },
   { key: "currentlyLearning", label: "Currently learning", type: "tags" },
-  { key: "resumeUrl", label: "Résumé URL", type: "text", placeholder: "https://… or /resume.pdf" },
+  { key: "resumeUrl", label: "External résumé link (optional)", type: "text", placeholder: "https://…", hint: "Only used when no PDF is uploaded above" },
   { key: "avatarUrl", label: "Photo URL", type: "text", placeholder: "https://… or /images/me.jpg" },
 ];
 

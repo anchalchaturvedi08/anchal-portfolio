@@ -11,11 +11,19 @@ declare global {
   var __portfolioMongo: Promise<typeof mongoose> | undefined;
 }
 
+/** Short description of the most recent connection failure, for /api/health. */
+export let lastDbError = "";
+
 export const connectDB = () => {
   if (!globalThis.__portfolioMongo) {
     globalThis.__portfolioMongo = mongoose
       .connect(config.mongoUri, { maxPoolSize: 5, serverSelectionTimeoutMS: 5000 })
+      .then((conn) => {
+        lastDbError = "";
+        return conn;
+      })
       .catch((error) => {
+        lastDbError = `${error?.name ?? "Error"}: ${String(error?.message ?? error).slice(0, 160)}`;
         // Never cache a failure, or every later request on this instance would
         // reuse the rejected promise and the API would stay down until recycled.
         globalThis.__portfolioMongo = undefined;

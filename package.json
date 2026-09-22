@@ -15,11 +15,13 @@
     "seed": "npm run seed --workspace server",
     "reseed": "npm run seed --workspace server -- --reset",
     "build": "npm run build --workspace client",
-    "typecheck": "tsc --noEmit && npm run typecheck --workspace server && npm run typecheck --workspace client"
+    "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace client",
+    "build:cpanel": "npm run build && node scripts/build-cpanel.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",
     "concurrently": "^9.2.1",
+    "esbuild": "^0.28.2",
     "typescript": "~5.9.3"
   },
   "dependencies": {

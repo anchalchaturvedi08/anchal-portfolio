@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink, LogOut } from "lucide-react";
 import { api, auth } from "../lib/api";
 import ProfileEditor from "./ProfileEditor";
+import ResumeManager from "./ResumeManager";
 import ResourceManager from "./ResourceManager";
 import Messages from "./Messages";
 import type { FieldDef } from "./fields";
@@ -115,7 +116,12 @@ export default function Admin() {
         ))}
       </div>
 
-      {tab === "Profile" && <ProfileEditor />}
+      {tab === "Profile" && (
+        <>
+          <ResumeManager />
+          <ProfileEditor />
+        </>
+      )}
       {tab === "Projects" && (
         <ResourceManager resource="projects" singular="project" fields={projectFields}
           describe={(p) => ({ title: p.title, meta: (p.tech ?? []).join(" · ") })} />

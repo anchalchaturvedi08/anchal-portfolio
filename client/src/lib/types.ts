@@ -51,9 +51,12 @@ export interface Message {
   createdAt: string;
 }
 
+export interface ResumeMeta { size: number; updatedAt: string }
+
 export interface Portfolio {
   profile: Profile | null;
   projects: Project[];
   skills: Skill[];
   experience: Experience[];
+  resume: ResumeMeta | null;
 }

@@ -38,7 +38,7 @@ function LocalTime() {
   return <span className="font-mono tabular-nums">{time} IST</span>;
 }
 
-export default function Hero({ profile }: { profile: Profile }) {
+export default function Hero({ profile, onOpenResume }: { profile: Profile; onOpenResume?: () => void }) {
   const [first, ...rest] = profile.name.split(" ");
   const initials = profile.name.split(" ").map((w) => w[0]).join("").slice(0, 2);
 
@@ -73,15 +73,24 @@ export default function Hero({ profile }: { profile: Profile }) {
               View my work
               <ArrowDownRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </a>
-            {profile.resumeUrl && (
-              <a
-                href={profile.resumeUrl}
-                target="_blank"
-                rel="noreferrer"
+            {onOpenResume ? (
+              <button
+                onClick={onOpenResume}
                 className="inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
               >
-                <FileText className="size-4" /> Résumé
-              </a>
+                <FileText className="size-4" /> CV
+              </button>
+            ) : (
+              profile.resumeUrl && (
+                <a
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                >
+                  <FileText className="size-4" /> CV
+                </a>
+              )
             )}
           </div>
         </div>

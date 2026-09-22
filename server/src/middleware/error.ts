@@ -25,6 +25,9 @@ export const errorHandler = (err: unknown, _req: Request, res: Response, _next: 
   if (err instanceof HttpError) {
     return res.status(err.status).json({ message: err.message });
   }
+  if ((err as { type?: string })?.type === "entity.too.large") {
+    return res.status(413).json({ message: "File is too large" });
+  }
   if (err instanceof SyntaxError && "body" in err) {
     return res.status(400).json({ message: "Malformed JSON" });
   }

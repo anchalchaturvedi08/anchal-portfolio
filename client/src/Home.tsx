@@ -1,6 +1,8 @@
+import { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RotateCw } from "lucide-react";
 import Nav from "./components/Nav";
+import ResumeModal from "./components/ResumeModal";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
@@ -27,6 +29,10 @@ export default function Home() {
   });
 
   const profile = data?.profile;
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const closeResume = useCallback(() => setResumeOpen(false), []);
+  // The CV buttons only appear once a PDF has been uploaded from the admin panel.
+  const openResume = data?.resume ? () => setResumeOpen(true) : undefined;
   const initials = (profile?.name ?? "").split(" ").map((w) => w[0]).join("").slice(0, 2) || "•";
 
   return (
@@ -54,7 +60,7 @@ export default function Home() {
 
         {data && profile && (
           <>
-            <Hero profile={profile} />
+            <Hero profile={profile} onOpenResume={openResume} />
             <About profile={profile} />
             <Projects projects={data.projects} />
             <Skills skills={data.skills} />
@@ -67,6 +73,9 @@ export default function Home() {
           </>
         )}
       </main>
+      {data?.resume && profile && (
+        <ResumeModal open={resumeOpen} onClose={closeResume} version={data.resume.updatedAt} name={profile.name} />
+      )}
     </>
   );
 }
